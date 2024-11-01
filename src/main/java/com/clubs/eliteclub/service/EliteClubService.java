@@ -1,6 +1,7 @@
 package com.clubs.eliteclub.service;
 
 import com.clubs.eliteclub.dto.ClubDTO;
+import com.clubs.eliteclub.model.SearchCriteria;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public interface EliteClubService {
 
     List<ClubDTO> getAll();
 
-    List<ClubDTO> searchClub(String searchTerm);
+    List<ClubDTO> searchClub(SearchCriteria searchCriteria);
 
     void addClub(String... clubNames);
 

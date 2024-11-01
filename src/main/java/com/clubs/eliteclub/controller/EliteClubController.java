@@ -1,7 +1,9 @@
 package com.clubs.eliteclub.controller;
 
+import com.clubs.eliteclub.model.SearchCriteria;
 import com.clubs.eliteclub.service.EliteClubService;
 import com.clubs.eliteclub.dto.ClubDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +36,8 @@ public class EliteClubController {
     }
 
     @GetMapping(path = "/club/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ClubDTO> searchClub(@RequestParam String name) {
-        return eliteClubService.searchClub(name);
+    public List<ClubDTO> searchClub(@Valid SearchCriteria searchCriteria) {
+        return eliteClubService.searchClub(searchCriteria);
     }
 
     @DeleteMapping(path = "/club/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

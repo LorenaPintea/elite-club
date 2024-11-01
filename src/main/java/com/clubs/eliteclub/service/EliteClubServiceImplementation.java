@@ -1,7 +1,8 @@
 package com.clubs.eliteclub.service;
 
-import com.clubs.eliteclub.model.Club;
 import com.clubs.eliteclub.dto.ClubDTO;
+import com.clubs.eliteclub.model.Club;
+import com.clubs.eliteclub.model.SearchCriteria;
 import com.clubs.eliteclub.repository.EliteClubRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,14 +35,24 @@ public class EliteClubServiceImplementation implements EliteClubService {
     }
 
     private String buildSearchLikePattern(String name) {
-        return name.toLowerCase() + "%";
+        return (name != null ? name.toLowerCase() : "") + "%";
     }
 
-    public List<ClubDTO> searchClub(String clubName) {
-        return eliteClubRepository.findClubs(buildSearchLikePattern(clubName))
-                .stream()
+    public List<ClubDTO> searchClub(SearchCriteria searchCriteria) {
+        List<Club> clubs = eliteClubRepository.findClubs(buildSearchLikePattern(searchCriteria.getClubName()));
+
+        if (searchCriteria.getRating() > 0 && searchCriteria.getRating() < 6) {
+            // Filter with rating set
+            return clubs.stream()
+                    .filter(club -> club.getRating() >= searchCriteria.getRating())
+                    .map(club -> new ClubDTO(club.getName(), club.getRating()))
+                    .collect(Collectors.toList());
+        }
+        // Filter without rating set
+        return clubs.stream()
                 .map(club -> new ClubDTO(club.getName(), club.getRating()))
                 .collect(Collectors.toList());
+
     }
 
     public void addClub(String... clubNames) {
